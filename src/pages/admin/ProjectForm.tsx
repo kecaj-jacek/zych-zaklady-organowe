@@ -1,8 +1,6 @@
 import { useState, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDropzone } from 'react-dropzone';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
 import { type Project, getProjects, saveProject, createSlug } from '../../lib/db';
 import { ArrowLeft, UploadCloud, X } from 'lucide-react';
 
@@ -33,7 +31,7 @@ export const ProjectForm = () => {
 
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const handleTextChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleTextChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     
     setFormData(prev => {
@@ -52,9 +50,7 @@ export const ProjectForm = () => {
     }
   };
 
-  const handleQuillChange = (content: string) => {
-    setFormData(prev => ({ ...prev, longDescription: content }));
-  };
+
 
   const validate = () => {
     const newErrors: Record<string, string> = {};
@@ -280,15 +276,16 @@ export const ProjectForm = () => {
 
           <div className="border-t border-gray-100 my-8"></div>
 
-          {/* Long Description (Rich Text) */}
+          {/* Long Description */}
           <div className="mb-12">
-             <label className="block text-sm font-medium text-gray-700 mb-2">Szczegółowy opis</label>
+             <label className="block text-sm font-medium text-gray-700 mb-2">Szczegółowy opis (obsługuje znaczniki HTML np. &lt;b&gt;, &lt;br&gt;)</label>
              <div className="bg-white">
-               <ReactQuill 
-                 theme="snow" 
+               <textarea 
+                 name="longDescription"
                  value={formData.longDescription} 
-                 onChange={handleQuillChange} 
-                 className="h-64 mb-12"
+                 onChange={handleTextChange} 
+                 className="w-full px-4 py-3 border border-gray-300 rounded-sm focus:ring-2 focus:ring-[#11161B] outline-none min-h-[250px] resize-y"
+                 placeholder="Wpisz opis projektu..."
                />
              </div>
           </div>
