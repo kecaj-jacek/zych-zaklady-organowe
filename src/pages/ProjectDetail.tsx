@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { Project, getProjectBySlug } from '../lib/db';
+import { type Project, getProjectBySlug } from '../lib/db';
 import { ArrowLeft } from 'lucide-react';
 
 export const ProjectDetail = () => {

@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useDropzone } from 'react-dropzone';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { Project, getProjects, saveProject, createSlug } from '../../lib/db';
+import { type Project, getProjects, saveProject, createSlug } from '../../lib/db';
 import { ArrowLeft, UploadCloud, X } from 'lucide-react';
 
 export const ProjectForm = () => {
