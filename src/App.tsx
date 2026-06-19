@@ -4,6 +4,7 @@ import { Home } from './pages/Home';
 import { About } from './pages/About';
 import { History } from './pages/History';
 import { Contact } from './pages/Contact';
+import { Projects } from './pages/Projects';
 import { ProjectList } from './pages/admin/ProjectList';
 import { ProjectForm } from './pages/admin/ProjectForm';
 import { ProjectDetail } from './pages/ProjectDetail';
@@ -17,6 +18,7 @@ function App() {
           <Route path="o-nas" element={<About />} />
           <Route path="nasza-historia" element={<History />} />
           <Route path="kontakt" element={<Contact />} />
+          <Route path="realizacje" element={<Projects />} />
           <Route path="realizacje/:slug" element={<ProjectDetail />} />
           {/* Fallback for other paths for now, rendering Home */}
           <Route path="*" element={<Home />} />
