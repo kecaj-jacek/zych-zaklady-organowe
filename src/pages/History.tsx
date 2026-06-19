@@ -174,7 +174,7 @@ export const History = () => {
                         <div 
                           className={`absolute w-3 h-3 rounded-full border-2 transition-all duration-500 z-20 
                             ${isLeftSticky 
-                              ? 'left-6 lg:left-auto lg:-left-16 -translate-x-1/2' 
+                              ? 'left-6 lg:-left-16 -translate-x-1/2' 
                               : 'left-6 lg:left-auto lg:-right-16 -translate-x-1/2 lg:translate-x-1/2'} 
                             mt-2 lg:mt-3
                             ${isActive 
