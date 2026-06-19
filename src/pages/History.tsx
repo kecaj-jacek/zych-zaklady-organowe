@@ -149,7 +149,7 @@ export const History = () => {
                 
                 {/* Sticky Panel (Hidden on mobile) */}
                 <div className={`hidden lg:block w-1/2 ${isLeftSticky ? 'order-1 pr-16' : 'order-2 pl-16'}`}>
-                  <div className="sticky top-32 h-[60vh] w-full rounded-sm overflow-hidden shadow-2xl bg-[#181E24]">
+                  <div className="sticky top-40 h-[50vh] w-full max-w-md mx-auto rounded-sm overflow-hidden shadow-2xl bg-[#181E24]">
                     <img
                       src="/organy2.jpg"
                       alt="Historia Zakładów Organowych ZYCH"
@@ -159,7 +159,7 @@ export const History = () => {
                 </div>
 
                 {/* Milestones Column */}
-                <div className={`w-full lg:w-1/2 flex flex-col justify-center space-y-24 py-16 ${isLeftSticky ? 'order-2 lg:pl-16' : 'order-1 lg:pr-16'}`}>
+                <div className={`w-full lg:w-1/2 flex flex-col justify-center space-y-48 py-24 ${isLeftSticky ? 'order-2 lg:pl-16' : 'order-1 lg:pr-16'}`}>
                   {era.milestones.map((milestone) => {
                     const isActive = activeYear === milestone.year;
 
@@ -184,19 +184,19 @@ export const History = () => {
 
                         {/* Content */}
                         <div className={`transition-all duration-500 ${isActive ? 'opacity-100' : 'opacity-40'}`}>
-                          <h3 className={`text-3xl md:text-4xl font-semibold mb-3 ${isActive ? 'text-white' : 'text-gray-400'}`}>
+                          <h3 className={`text-2xl md:text-3xl font-semibold mb-2 ${isActive ? 'text-white' : 'text-gray-400'}`}>
                             {milestone.year}
                           </h3>
-                          <h4 className="text-xl md:text-2xl font-light tracking-wide text-gray-200 mb-4">
+                          <h4 className="text-lg md:text-xl font-light tracking-wide text-gray-200 mb-3">
                             {milestone.title}
                           </h4>
-                          <p className={`text-sm md:text-base leading-relaxed ${milestone.major ? 'max-w-xl text-gray-300' : 'max-w-md text-gray-400'}`}>
+                          <p className={`text-sm leading-relaxed ${milestone.major ? 'max-w-lg text-gray-300' : 'max-w-sm text-gray-400'}`}>
                             {milestone.description}
                           </p>
 
                           {/* Mobile-only Image (if major) */}
                           {milestone.major && (
-                            <div className="lg:hidden mt-8 w-full max-w-md rounded-sm overflow-hidden aspect-video shadow-xl bg-gray-800">
+                            <div className="lg:hidden mt-6 w-full max-w-sm rounded-sm overflow-hidden aspect-video shadow-xl bg-gray-800">
                               <img src="/organy2.jpg" alt={milestone.title} className="w-full h-full object-cover" />
                             </div>
                           )}
