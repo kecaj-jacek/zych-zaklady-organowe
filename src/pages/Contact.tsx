@@ -13,7 +13,7 @@ export const Contact = () => {
               KONTAKT Z MANUFAKTURĄ
             </p>
             <h1 className="text-4xl md:text-6xl font-light text-gray-900 tracking-tighter">
-              Zapraszamy do dialogu
+              Zapraszamy do kontaktu
             </h1>
           </FadeInUp>
         </div>
