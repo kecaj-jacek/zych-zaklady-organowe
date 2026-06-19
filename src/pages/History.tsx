@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { motion, useScroll, AnimatePresence } from 'framer-motion';
+import { motion, useScroll } from 'framer-motion';
 import { FadeInUp } from '../components/UI';
 
 type Milestone = {
@@ -150,24 +150,11 @@ export const History = () => {
                 {/* Sticky Panel (Hidden on mobile) */}
                 <div className={`hidden lg:block w-1/2 ${isLeftSticky ? 'order-1 pr-16' : 'order-2 pl-16'}`}>
                   <div className="sticky top-32 h-[60vh] w-full rounded-sm overflow-hidden shadow-2xl bg-[#181E24]">
-                    <AnimatePresence mode="wait">
-                      {/* 
-                        In a real scenario with different images per year, the key would be activeYear, 
-                        and the src would change. Since the prompt says "Use exactly organy2.jpg for all nodes", 
-                        we simulate the cross-fade by remounting the image when the year changes, 
-                        or we could just use organy2.jpg.
-                      */}
-                      <motion.img
-                        key={activeYear}
-                        initial={{ opacity: 0, scale: 1.05 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.8, ease: "easeOut" }}
-                        src="/organy2.jpg"
-                        alt={`Wydarzenie z roku ${activeYear}`}
-                        className="w-full h-full object-cover"
-                      />
-                    </AnimatePresence>
+                    <img
+                      src="/organy2.jpg"
+                      alt="Historia Zakładów Organowych ZYCH"
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                 </div>
 
@@ -187,8 +174,8 @@ export const History = () => {
                         <div 
                           className={`absolute w-3 h-3 rounded-full border-2 transition-all duration-500 z-20 
                             ${isLeftSticky 
-                              ? 'left-0 -translate-x-1.5 lg:-left-16 lg:translate-x-1.5' 
-                              : 'left-0 -translate-x-1.5 lg:left-auto lg:-right-16 lg:-translate-x-1.5'} 
+                              ? 'left-6 lg:left-auto lg:-left-16 -translate-x-1/2' 
+                              : 'left-6 lg:left-auto lg:-right-16 -translate-x-1/2 lg:translate-x-1/2'} 
                             mt-2 lg:mt-3
                             ${isActive 
                               ? 'bg-gray-100 border-gray-100 scale-150 shadow-[0_0_20px_rgba(255,255,255,0.4)]' 
