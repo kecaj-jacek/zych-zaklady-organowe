@@ -10,6 +10,7 @@ export interface Project {
   yearBuilt: number;
   voicesCount: number;
   manuals: string;
+  actionType?: string;
   status: 'completed' | 'upcoming';
   mainImage: string;
   galleryImages: string[];

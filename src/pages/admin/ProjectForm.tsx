@@ -16,6 +16,7 @@ export const ProjectForm = () => {
     yearBuilt: new Date().getFullYear(),
     voicesCount: 20,
     manuals: 'II/P',
+    actionType: 'Mechaniczna',
     status: 'completed',
     mainImage: '',
     galleryImages: [],
@@ -211,7 +212,7 @@ export const ProjectForm = () => {
               />
             </div>
 
-            {/* Manuals & Status */}
+            {/* Manuals, ActionType & Status */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Manuały</label>
               <input 
@@ -225,6 +226,18 @@ export const ProjectForm = () => {
             </div>
 
             <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Traktura (gry / rejestrów)</label>
+              <input 
+                type="text" 
+                name="actionType" 
+                value={formData.actionType || ''} 
+                onChange={handleTextChange}
+                placeholder="np. Mechaniczna / Elektryczna"
+                className="w-full px-4 py-2 border border-gray-300 rounded-sm focus:ring-2 focus:ring-[#11161B] outline-none"
+              />
+            </div>
+
+            <div className="md:col-span-2">
               <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
               <select 
                 name="status" 
