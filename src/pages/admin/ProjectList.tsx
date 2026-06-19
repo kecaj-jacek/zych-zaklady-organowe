@@ -1,22 +1,36 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { type Project, getProjects, deleteProject } from '../../lib/db';
 import { Edit, Trash2, Plus } from 'lucide-react';
 
 export const ProjectList = () => {
-  const loadProjects = () => {
-    const data = getProjects();
-    // Sort by year descending
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchProjects = async () => {
+    const data = await getProjects();
     data.sort((a, b) => b.yearBuilt - a.yearBuilt);
     return data;
   };
 
-  const [projects, setProjects] = useState<Project[]>(loadProjects);
+  useEffect(() => {
+    fetchProjects().then(data => {
+      setProjects(data);
+      setLoading(false);
+    });
+  }, []);
 
-  const handleDelete = (id: string, name: string) => {
+  const loadProjects = async () => {
+    setLoading(true);
+    const data = await fetchProjects();
+    setProjects(data);
+    setLoading(false);
+  };
+
+  const handleDelete = async (id: string, name: string) => {
     if (window.confirm(`Czy na pewno chcesz usunąć projekt "${name}"?`)) {
-      deleteProject(id);
-      setProjects(loadProjects());
+      await deleteProject(id);
+      loadProjects();
     }
   };
 
@@ -38,7 +52,9 @@ export const ProjectList = () => {
         </div>
 
         <div className="bg-white border border-gray-200 rounded-sm shadow-sm overflow-hidden">
-          {projects.length === 0 ? (
+          {loading ? (
+             <div className="p-12 text-center text-gray-500">Ładowanie bazy danych...</div>
+          ) : projects.length === 0 ? (
             <div className="p-12 text-center text-gray-500">
               Brak zrealizowanych projektów. Dodaj pierwszą realizację.
             </div>

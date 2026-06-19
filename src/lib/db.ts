@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
+import localforage from 'localforage';
 
 export interface Project {
   id: string;
@@ -15,32 +16,32 @@ export interface Project {
   longDescription: string;
 }
 
-const STORAGE_KEY = 'zych_projects';
+const STORAGE_KEY = 'zych_projects_db';
 
-export const getProjects = (): Project[] => {
+export const getProjects = async (): Promise<Project[]> => {
   try {
-    const data = localStorage.getItem(STORAGE_KEY);
-    return data ? JSON.parse(data) : [];
+    const data = await localforage.getItem<Project[]>(STORAGE_KEY);
+    return data || [];
   } catch (error) {
-    console.error('Failed to load projects from DB', error);
+    console.error('Failed to load projects from IndexedDB', error);
     return [];
   }
 };
 
-export const getProjectBySlug = (slug: string): Project | undefined => {
-  const projects = getProjects();
+export const getProjectBySlug = async (slug: string): Promise<Project | undefined> => {
+  const projects = await getProjects();
   return projects.find((p) => p.slug === slug);
 };
 
-export const saveProject = (project: Omit<Project, 'id'> & { id?: string }): Project => {
-  const projects = getProjects();
+export const saveProject = async (project: Omit<Project, 'id'> & { id?: string }): Promise<Project> => {
+  const projects = await getProjects();
   
   if (project.id) {
     const index = projects.findIndex(p => p.id === project.id);
     if (index !== -1) {
       const updated = { ...projects[index], ...project } as Project;
       projects[index] = updated;
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(projects));
+      await localforage.setItem(STORAGE_KEY, projects);
       return updated;
     }
   }
@@ -51,14 +52,14 @@ export const saveProject = (project: Omit<Project, 'id'> & { id?: string }): Pro
     id: uuidv4(),
   };
   projects.push(newProject);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(projects));
+  await localforage.setItem(STORAGE_KEY, projects);
   return newProject;
 };
 
-export const deleteProject = (id: string): void => {
-  const projects = getProjects();
+export const deleteProject = async (id: string): Promise<void> => {
+  const projects = await getProjects();
   const filtered = projects.filter((p) => p.id !== id);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
+  await localforage.setItem(STORAGE_KEY, filtered);
 };
 
 export const createSlug = (name: string): string => {

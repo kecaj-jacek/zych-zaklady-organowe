@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDropzone } from 'react-dropzone';
 import { type Project, getProjects, saveProject, createSlug } from '../../lib/db';
@@ -8,28 +8,35 @@ export const ProjectForm = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   
-  const [formData, setFormData] = useState<Omit<Project, 'id'>>(() => {
-    if (id) {
-      const projects = getProjects();
-      const existing = projects.find(p => p.id === id);
-      if (existing) return existing;
-    }
-    return {
-      slug: '',
-      venueName: '',
-      city: '',
-      country: 'Polska',
-      yearBuilt: new Date().getFullYear(),
-      voicesCount: 20,
-      manuals: 'II/P',
-      status: 'completed',
-      mainImage: '',
-      galleryImages: [],
-      longDescription: ''
-    };
+  const [formData, setFormData] = useState<Omit<Project, 'id'>>({
+    slug: '',
+    venueName: '',
+    city: '',
+    country: 'Polska',
+    yearBuilt: new Date().getFullYear(),
+    voicesCount: 20,
+    manuals: 'II/P',
+    status: 'completed',
+    mainImage: '',
+    galleryImages: [],
+    longDescription: ''
   });
-
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const loadData = async () => {
+      if (id) {
+        const projects = await getProjects();
+        const existing = projects.find(p => p.id === id);
+        if (existing) {
+          setFormData(existing);
+        }
+      }
+    };
+    loadData();
+  }, [id]);
+
 
   const handleTextChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -51,7 +58,6 @@ export const ProjectForm = () => {
   };
 
 
-
   const validate = () => {
     const newErrors: Record<string, string> = {};
     if (!formData.venueName.trim()) newErrors.venueName = 'Nazwa obiektu jest wymagana';
@@ -62,12 +68,19 @@ export const ProjectForm = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
 
-    saveProject(id ? { ...formData, id } : formData);
-    navigate('/admin/realizacje');
+    setLoading(true);
+    try {
+      await saveProject(id ? { ...formData, id } : formData);
+      navigate('/admin/realizacje');
+    } catch (err) {
+      console.error(err);
+      alert("Wystąpił błąd podczas zapisywania projektu.");
+      setLoading(false);
+    }
   };
 
   // Image Upload Handlers (converts files to base64 for local dev storage)
@@ -294,9 +307,10 @@ export const ProjectForm = () => {
           <div className="flex justify-end pt-4 border-t border-gray-200">
             <button 
               type="submit" 
-              className="px-6 py-3 bg-[#11161B] text-white font-medium rounded hover:bg-gray-800 transition-colors shadow-sm"
+              disabled={loading}
+              className="px-6 py-3 bg-[#11161B] text-white font-medium rounded hover:bg-gray-800 transition-colors shadow-sm disabled:opacity-50"
             >
-              Zapisz i publikuj
+              {loading ? 'Zapisywanie...' : 'Zapisz i publikuj'}
             </button>
           </div>
 

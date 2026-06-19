@@ -6,18 +6,22 @@ import { ArrowLeft } from 'lucide-react';
 export const ProjectDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
-  const [project] = useState<Project | null>(() => {
-    if (slug) {
-      return getProjectBySlug(slug) || null;
-    }
-    return null;
-  });
+  const [project, setProject] = useState<Project | null>(null);
 
   useEffect(() => {
-    if (slug && !project) {
-      navigate('/');
-    }
-  }, [slug, project, navigate]);
+    const fetchProject = async () => {
+      if (slug) {
+        const data = await getProjectBySlug(slug);
+        if (data) {
+          setProject(data);
+        } else {
+          // Not found
+          navigate('/');
+        }
+      }
+    };
+    fetchProject();
+  }, [slug, navigate]);
 
   if (!project) return null;
 
