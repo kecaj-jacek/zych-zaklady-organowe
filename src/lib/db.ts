@@ -64,7 +64,14 @@ export const deleteProject = async (id: string): Promise<void> => {
 };
 
 export const createSlug = (name: string): string => {
-  return name
+  const polishMap: { [key: string]: string } = {
+    'ą': 'a', 'ć': 'c', 'ę': 'e', 'ł': 'l', 'ń': 'n', 'ó': 'o', 'ś': 's', 'ź': 'z', 'ż': 'z',
+    'Ą': 'a', 'Ć': 'c', 'Ę': 'e', 'Ł': 'l', 'Ń': 'n', 'Ó': 'o', 'Ś': 's', 'Ź': 'z', 'Ż': 'z'
+  };
+  
+  const withoutPolish = name.replace(/[ąćęłńóśźżĄĆĘŁŃÓŚŹŻ]/g, match => polishMap[match]);
+
+  return withoutPolish
     .toLowerCase()
     .replace(/[^\w\s-]/g, '')
     .replace(/[\s_-]+/g, '-')

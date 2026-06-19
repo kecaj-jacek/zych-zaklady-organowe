@@ -185,6 +185,7 @@ export const Projects = () => {
                       <img 
                         src={project.mainImage} 
                         alt={project.venueName} 
+                        loading="lazy"
                         className="w-full h-full object-cover transform scale-100 group-hover:scale-105 transition-transform duration-700 ease-in-out" 
                       />
                     ) : (

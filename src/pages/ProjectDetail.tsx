@@ -9,6 +9,7 @@ export const ProjectDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const [project, setProject] = useState<Project | null>(null);
+  const [notFound, setNotFound] = useState(false);
   
   // Lightbox State
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
@@ -20,8 +21,8 @@ export const ProjectDetail = () => {
         const data = await getProjectBySlug(slug);
         if (data && mounted) {
           setProject(data);
-        } else if (!data) {
-          navigate('/');
+        } else if (!data && mounted) {
+          setNotFound(true);
         }
       }
     };
@@ -44,6 +45,24 @@ export const ProjectDetail = () => {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [selectedImageIndex, project]);
+
+  if (notFound) {
+    return (
+      <div className="min-h-[80vh] flex flex-col items-center justify-center px-6 text-center">
+        <FadeInUp>
+          <h1 className="text-3xl md:text-5xl font-light text-gray-900 tracking-tight mb-4">
+            Nie znaleziono takiej realizacji
+          </h1>
+          <p className="text-gray-500 mb-8 max-w-md mx-auto">
+            Projekt, którego szukasz, nie istnieje lub został usunięty.
+          </p>
+          <Link to="/realizacje" className="inline-flex items-center px-6 py-3 bg-[#11161B] text-white rounded-sm font-medium hover:bg-gray-800 transition-colors">
+            Wróć do katalogu
+          </Link>
+        </FadeInUp>
+      </div>
+    );
+  }
 
   if (!project) return null;
 
@@ -157,6 +176,7 @@ export const ProjectDetail = () => {
                     <img 
                       src={img} 
                       alt={`${project.venueName} - ujęcie ${idx + 1}`} 
+                      loading="lazy"
                       className="w-full h-full object-cover transform scale-100 group-hover:scale-105 transition-transform duration-700 ease-in-out opacity-80 group-hover:opacity-100" 
                     />
                     {/* Hover Overlay */}
@@ -215,9 +235,10 @@ export const ProjectDetail = () => {
             >
               <img 
                 src={project.galleryImages[selectedImageIndex]} 
-                alt="Galeria" 
+                alt="Galeria powiększenie" 
+                loading="lazy"
                 className="max-w-full max-h-full object-contain shadow-2xl rounded-sm"
-                onClick={(e) => e.stopPropagation()} // prevent closing when clicking the image itself
+                onClick={(e) => e.stopPropagation()} 
               />
               
               {/* Image Counter */}
