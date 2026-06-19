@@ -57,7 +57,8 @@ const uploadBase64Image = async (base64Str: string, folder: string): Promise<str
 };
 
 // Map DB snake_case to frontend camelCase
-const mapToFrontend = (row: Record<string, unknown>): Project => ({
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const mapToFrontend = (row: any): Project => ({
   id: row.id,
   slug: row.slug,
   venueName: row.venue_name,
